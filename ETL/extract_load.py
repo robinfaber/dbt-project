@@ -10,8 +10,8 @@ load_dotenv()
 def create_voertuigen_table(cursor):
     try:
         cursor.execute("""
-        DROP TABLE IF EXISTS raw.voertuigen;
-        CREATE TABLE IF NOT EXISTS raw.voertuigen (
+        DROP TABLE IF EXISTS raw.rdw__voertuigen;
+        CREATE TABLE IF NOT EXISTS raw.rdw__voertuigen (
             kenteken VARCHAR(255) PRIMARY KEY,
             voertuigsoort VARCHAR(255),
             merk VARCHAR(255),
@@ -115,114 +115,72 @@ def create_voertuigen_table(cursor):
         print(f"Error creating table voertuigen: {e}")
         raise
 
-def create_voertuigen_brandstof_table(cursor):
+def create_keuringen_table(cursor):
     try:
         cursor.execute("""
-        DROP TABLE IF EXISTS raw.voertuigen_brandstof;
-        CREATE TABLE IF NOT EXISTS raw.voertuigen_brandstof (
-            kenteken VARCHAR(255) PRIMARY KEY,
-            brandstof_volgnummer VARCHAR(255),
-            brandstof_omschrijving VARCHAR(255),
-            brandstofverbruik_buiten NUMERIC,
-            brandstofverbruik_gecombineerd NUMERIC,
-            brandstofverbruik_stad NUMERIC,
-            co2_uitstoot_gecombineerd INTEGER,
-            co2_uitstoot_gewogen INTEGER,
-            geluidsniveau_rijdend INTEGER,
-            geluidsniveau_stationair INTEGER,
-            emissiecode_omschrijving VARCHAR(255),
-            milieuklasse_eg_goedkeuring_licht VARCHAR(255),
-            milieuklasse_eg_goedkeuring_zwaar VARCHAR(255),
-            uitstoot_deeltjes_licht NUMERIC,
-            uitstoot_deeltjes_zwaar NUMERIC,
-            nettomaximumvermogen INTEGER,
-            nominaal_continu_maximumvermogen INTEGER,
-            roetuitstoot NUMERIC,
-            toerental_geluidsniveau INTEGER,
-            emis_deeltjes_type1_wltp NUMERIC,
-            emissie_co2_gecombineerd_wltp INTEGER,
-            emis_co2_gewogen_gecombineerd_wltp INTEGER,
-            brandstof_verbruik_gecombineerd_wltp NUMERIC,
-            brandstof_verbruik_gewogen_gecombineerd_wltp NUMERIC,
-            elektrisch_verbruik_enkel_elektrisch_wltp NUMERIC,
-            actie_radius_enkel_elektrisch_wltp INTEGER,
-            actie_radius_enkel_elektrisch_stad_wltp INTEGER,
-            elektrisch_verbruik_extern_opladen_wltp NUMERIC,
-            actie_radius_extern_opladen_wltp INTEGER,
-            actie_radius_extern_opladen_stad_wltp INTEGER,
-            max_vermogen_15_minuten INTEGER,
-            max_vermogen_60_minuten INTEGER,
-            netto_max_vermogen_elektrisch INTEGER,
-            klasse_hybride_elektrisch_voertuig VARCHAR(255),
-            opgegeven_maximum_snelheid INTEGER,
-            uitlaatemissieniveau VARCHAR(255)
+        DROP TABLE IF EXISTS raw.rdw__keuringen;
+        CREATE TABLE IF NOT EXISTS raw.rdw__keuringen (
+            kenteken VARCHAR(255),
+            soort_erkenning_keuringsinstantie VARCHAR(255),
+            meld_datum_door_keuringsinstantie INTEGER,
+            meld_tijd_door_keuringsinstantie INTEGER,
+            soort_erkenning_omschrijving TEXT,
+            soort_melding_ki_omschrijving TEXT,
+            vervaldatum_keuring INTEGER,
+            meld_datum_door_keuringsinstantie_dt TIMESTAMP,
+            vervaldatum_keuring_dt TIMESTAMP,
+            api_gebrek_constateringen TEXT,
+            api_gebrek_beschrijving TEXT,
+            PRIMARY KEY(kenteken, meld_datum_door_keuringsinstantie)
         )
         """)
-        print("Table voertuigen_brandstof created successfully")
+        print("Table rdw__keuringen created successfully")
     except Exception as e:
-        print(f"Error creating table voertuigen_brandstof: {e}")
+        print(f"Error creating table rdw__keuringen: {e}")
         raise
 
-def create_voertuigen_carrosserie_specificatie_table(cursor):
+def create_geconstateerde_gebreken_table(cursor):
     try:
         cursor.execute("""
-        DROP TABLE IF EXISTS raw.voertuigen_carrosserie_specificatie;
-        CREATE TABLE IF NOT EXISTS raw.voertuigen_carrosserie_specificatie (
-            kenteken VARCHAR(255) PRIMARY KEY,
-            carrosserie_volgnummer VARCHAR(255),
-            carrosserie_voertuig_nummer_code_volgnummer VARCHAR(255),
-            carrosseriecode VARCHAR(255),
-            carrosserie_voertuig_nummer_europese_omschrijving VARCHAR(255)
+        DROP TABLE IF EXISTS raw.rdw__geconstateerde_gebreken;
+        CREATE TABLE IF NOT EXISTS raw.rdw__geconstateerde_gebreken (
+            kenteken VARCHAR(255),
+            soort_erkenning_keuringsinstantie VARCHAR(255),
+            meld_datum_door_keuringsinstantie INTEGER,
+            meld_tijd_door_keuringsinstantie INTEGER,
+            gebrek_identificatie VARCHAR(255),
+            soort_erkenning_omschrijving TEXT,
+            aantal_gebreken_geconstateerd INTEGER,
+            meld_datum_door_keuringsinstantie_dt TIMESTAMP,
+            meld_datum_computed INTEGER,
+            PRIMARY KEY(kenteken, meld_datum_door_keuringsinstantie, meld_tijd_door_keuringsinstantie, gebrek_identificatie)
         )
         """)
-        print("Table voertuigen_carrosserie_specificatie created successfully")
+        print("Table rdw__geconstateerde_gebreken created successfully")
     except Exception as e:
-        print(f"Error creating table voertuigen_carrosserie_specificatie: {e}")
+        print(f"Error creating table rdw__geconstateerde_gebreken: {e}")
         raise
 
-def create_voertuigen_assen_table(cursor):
+def create_gebreken_beschrijving_table(cursor):
     try:
         cursor.execute("""
-        DROP TABLE IF EXISTS raw.voertuigen_assen;
-        CREATE TABLE IF NOT EXISTS raw.voertuigen_assen (
-            kenteken VARCHAR(255) PRIMARY KEY,
-            as_nummer INTEGER,
-            aantal_assen INTEGER,
-            aangedreven_as VARCHAR(255),
-            hefas VARCHAR(255),
-            plaatscode_as VARCHAR(255),
-            spoorbreedte INTEGER,
-            weggedrag_code VARCHAR(255),
-            wettelijk_toegestane_maximum_aslast INTEGER,
-            technisch_toegestane_maximum_aslast INTEGER,
-            geremde_as_indicator VARCHAR(255),
-            afstand_tot_volgende_as_voertuig INTEGER,
-            afstand_tot_volgende_as_voertuig_minimum INTEGER,
-            afstand_tot_volgende_as_voertuig_maximum INTEGER,
-            maximum_last_as_technisch_maximum INTEGER,
-            maximum_last_as_technisch_minimum INTEGER
+        DROP TABLE IF EXISTS raw.rdw__gebreken_beschrijving;
+        CREATE TABLE IF NOT EXISTS raw.rdw__gebreken_beschrijving (
+            gebrek_identificatie VARCHAR(255) PRIMARY KEY,
+            ingangsdatum_gebrek INTEGER,
+            einddatum_gebrek INTEGER,
+            gebrek_paragraaf_nummer INTEGER,
+            gebrek_artikel_nummer VARCHAR(255),
+            gebrek_omschrijving TEXT,
+            ingangsdatum_gebrek_dt TIMESTAMP,
+            einddatum_gebrek_dt TIMESTAMP,
+            ingangsdatum_gebrek_computed INTEGER,
+            einddatum_gebrek_computed INTEGER
         )
         """)
-        print("Table voertuigen_assen created successfully")
+        print("Table rdw__gebreken_beschrijving created successfully")
     except Exception as e:
-        print(f"Error creating table voertuigen_assen: {e}")
-        raise
-
-def create_voertuigen_voertuigklasse_table(cursor):
-    try:
-        cursor.execute("""
-        DROP TABLE IF EXISTS raw.voertuigen_voertuigklasse;
-        CREATE TABLE IF NOT EXISTS raw.voertuigen_voertuigklasse (
-            kenteken VARCHAR(255) PRIMARY KEY,
-            carrosserie_volgnummer VARCHAR(255),
-            carrosserie_klasse_volgnummer VARCHAR(255),
-            voertuigklasse VARCHAR(255),
-            voertuigklasse_omschrijving VARCHAR(255)
-        )
-        """)
-        print("Table voertuigen_voertuigklasse created successfully")
-    except Exception as e:
-        print(f"Error creating table voertuigen_voertuigklasse: {e}")
+        print(f"Error creating table rdw__gebreken_beschrijving: {e}")
         raise
 
 def fetch_data(url):
@@ -243,14 +201,25 @@ def load_data(cursor, table_name, data):
     # Prepare the SQL statement
     columns_sql = ', '.join(columns)
     values_sql = ', '.join(['%s'] * len(columns))
-    update_sql = ', '.join([f"{col} = EXCLUDED.{col}" for col in columns if col != 'kenteken'])
+    
+    if table_name == 'rdw__geconstateerde_gebreken':
+        conflict_columns = 'kenteken, meld_datum_door_keuringsinstantie, meld_tijd_door_keuringsinstantie, gebrek_identificatie'
+    elif table_name == 'rdw__gebreken_beschrijving':
+        conflict_columns = 'gebrek_identificatie'
+    else:
+        conflict_columns = 'kenteken'
+    
+    update_sql = ', '.join([f"{col} = EXCLUDED.{col}" for col in columns if col not in conflict_columns.split(', ')])
     
     insert_sql = f"""
     INSERT INTO raw.{table_name} ({columns_sql})
     VALUES ({values_sql})
-    ON CONFLICT (kenteken) DO UPDATE SET
+    ON CONFLICT ({conflict_columns}) DO UPDATE SET
     {update_sql}
     """
+    
+    print(f"SQL for {table_name}:")
+    print(insert_sql)
     
     # Prepare the data
     values = [[record.get(column) for column in columns] for record in data]
@@ -279,18 +248,15 @@ def main():
 
         # Create tables
         create_voertuigen_table(cursor)
-        create_voertuigen_brandstof_table(cursor)
-        create_voertuigen_carrosserie_specificatie_table(cursor)
-        create_voertuigen_assen_table(cursor)
-        create_voertuigen_voertuigklasse_table(cursor)
-
+        create_keuringen_table(cursor)
+        create_geconstateerde_gebreken_table(cursor)
+        create_gebreken_beschrijving_table(cursor)
         # Define tables and their corresponding URLs
         tables = [
-            ("voertuigen", "https://opendata.rdw.nl/resource/m9d7-ebf2.json"),
-            ("voertuigen_brandstof", "https://opendata.rdw.nl/resource/8ys7-d773.json"),
-            ("voertuigen_carrosserie_specificatie", "https://opendata.rdw.nl/resource/jhie-znh9.json"),
-            ("voertuigen_assen", "https://opendata.rdw.nl/resource/3huj-srit.json"),
-            ("voertuigen_voertuigklasse", "https://opendata.rdw.nl/resource/kmfi-hrps.json")
+            ("rdw__voertuigen", "https://opendata.rdw.nl/resource/m9d7-ebf2.json"),
+            ("rdw__keuringen", "https://opendata.rdw.nl/resource/sgfe-77wx.json"),
+            ("rdw__geconstateerde_gebreken", "https://opendata.rdw.nl/resource/a34c-vvps.json"),
+            ("rdw__gebreken_beschrijving", "https://opendata.rdw.nl/resource/hx2c-gt7k.json")
         ]
 
         # Fetch and load data for each table

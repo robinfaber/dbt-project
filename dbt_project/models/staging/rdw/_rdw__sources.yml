@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: rdw
+    database: |
+      {%- if  target.name == "dev" -%} dbt-project-dev
+      {%- elif target.name == "prod"  -%} dbt-project-dev
+      {%- else -%} invalid_database
+      {%- endif -%}
+    schema: raw
+    tables:
+      - name: rdw__voertuigen
+      - name: rdw__keuringen
+      - name: rdw__geconstateerde_gebreken
+      - name: rdw__gebreken_beschrijving

@@ -1,0 +1,76 @@
+version: 2
+
+models:
+  - name: stg_rdw__voertuigen
+    description: "Voertuigen"
+    columns:
+      - name: voertuig_id
+        description: "Voertuig ID"
+      - name: hoofdtype_voertuig
+        description: "Hoofdtype voertuig"
+      - name: subtype_voertuig
+        description: "Subtype voertuig"
+      - name: type_carrosserie
+        description: "Type carrosserie"
+      - name: merk
+        description: "Merk"
+      - name: model
+        description: "Model"
+      - name: kleur
+        description: "Kleur"
+      - name: aantal_zitplaatsen
+        description: "Aantal zitplaatsen"
+      - name: aantal_deuren
+        description: "Aantal deuren"
+      - name: aantal_wielen
+        description: "Aantal wielen"
+      - name: datum_eerste_toelating
+        description: "Datum eerste toelating"
+      - name: datum_tenaamstelling
+        description: "Datum tenaamstelling"
+      - name: datum_eerste_tenaamstelling
+        description: "Datum eerste tenaamstelling"
+      - name: vervaldatum_apk
+        description: "Vervaldatum APK"
+      - name: tellerstandoordel
+        description: "Tellerstandoordel"
+      - name: prijs
+        description: "Prijs"
+      - name: is_wam_verzekerd
+        description: "Is WAM verzekerd"
+
+  - name: stg_rdw__keuringen
+    description: "APK Keuringen"
+    columns:
+      - name: voertuig_id
+        description: "Voertuig ID"
+      - name: datum_keuring
+        description: "Datum keuring"
+      - name: soort_erkenning
+        description: "Soort erkenning"
+      - name: soort_melding
+        description: "Soort melding"
+      - name: vervaldatum_apk
+        description: "Vervaldatum APK"
+
+  - name: stg_rdw__geconstateerde_gebreken
+    description: "Geconstateerde gebreken"
+    columns:
+      - name: voertuig_id
+        description: "Voertuig ID"
+      - name: datum_keuring
+        description: "Datum keuring"
+      - name: gebrek_id
+        description: "Gebrek ID"
+
+  - name: stg_rdw__gebreken_beschrijving
+    description: "Gebreken beschrijving"
+    columns:
+      - name: gebrek_id
+        description: "Gebrek ID"
+      - name: gebrek_omschrijving
+        description: "Gebrek omschrijving"
+      - name: ingangsdatum_gebrek
+        description: "Ingangsdatum gebrek"
+      - name: einddatum_gebrek
+        description: "Einddatum gebrek"
