@@ -22,3 +22,55 @@ models:
         description: "Days to APK expiration"
       - name: apk_verval_status
         description: "APK expiration status"
+
+  - name: dim_voertuigen
+    description: "Voertuigen"
+    columns:
+      - name: voertuig_id
+        description: "ID of the vehicle"
+      - name: hoofdtype_voertuig
+        description: "Type of vehicle"
+      - name: subtype_voertuig
+        description: "Subtype of vehicle"
+      - name: type_carrosserie
+        description: "Type of bodywork"
+      - name: merk
+        description: "Brand"
+      - name: model
+        description: "Model"
+      - name: kleur
+        description: "Color"
+      - name: aantal_zitplaatsen
+        description: "Number of seats"
+      - name: aantal_deuren
+        description: "Number of doors"
+      - name: aantal_wielen
+        description: "Number of wheels"
+      - name: datum_eerste_toelating
+        description: "Date of first registration"
+      - name: leeftijd_voertuig
+        description: "Age of the vehicle"
+      - name: datum_tenaamstelling
+        description: "Date of registration"
+      - name: datum_eerste_tenaamstelling
+        description: "Date of first registration in the Netherlands"
+      - name: vervaldatum_apk
+        description: "Expiration date of the APK"
+      - name: tellerstandoordeel
+        description: "Tachometer reading"
+      - name: prijs
+        description: "Price"
+      - name: is_wam_verzekerd
+        description: "Is the vehicle WAM insured?"  
+
+  - name: dim_gebreken
+    description: "Defects"
+    columns:
+      - name: gebrek_id
+        description: "ID of the defect"
+      - name: gebrek_omschrijving
+        description: "Description of the defect"
+      - name: ingangsdatum_gebrek
+        description: "Start date of the defect"
+      - name: aantal_voertuigen
+        description: "Number of vehicles with the defect"

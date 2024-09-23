@@ -4,7 +4,10 @@ models:
     description: "Joined keuringen and geconstateerde_gebreken"
     columns:
       - name: unique_id
-        description: "MD5 hash of voertuig_id, datum_keuring and gebrek_id"
+        description: "Composite key of voertuig_id, datum_keuring and gebrek_id"
+        data_tests:
+          - unique
+          - not_null
       - name: voertuig_id
         description: "ID of the vehicle"
       - name: datum_keuring

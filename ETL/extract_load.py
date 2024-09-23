@@ -10,7 +10,7 @@ load_dotenv()
 def create_voertuigen_table(cursor):
     try:
         cursor.execute("""
-        DROP TABLE IF EXISTS raw.rdw__voertuigen;
+        DROP TABLE IF EXISTS raw.rdw__voertuigen CASCADE;
         CREATE TABLE IF NOT EXISTS raw.rdw__voertuigen (
             kenteken VARCHAR(255) PRIMARY KEY,
             voertuigsoort VARCHAR(255),
@@ -118,7 +118,7 @@ def create_voertuigen_table(cursor):
 def create_keuringen_table(cursor):
     try:
         cursor.execute("""
-        DROP TABLE IF EXISTS raw.rdw__keuringen;
+        DROP TABLE IF EXISTS raw.rdw__keuringen CASCADE;
         CREATE TABLE IF NOT EXISTS raw.rdw__keuringen (
             kenteken VARCHAR(255),
             soort_erkenning_keuringsinstantie VARCHAR(255),
@@ -142,7 +142,7 @@ def create_keuringen_table(cursor):
 def create_geconstateerde_gebreken_table(cursor):
     try:
         cursor.execute("""
-        DROP TABLE IF EXISTS raw.rdw__geconstateerde_gebreken;
+        DROP TABLE IF EXISTS raw.rdw__geconstateerde_gebreken CASCADE;
         CREATE TABLE IF NOT EXISTS raw.rdw__geconstateerde_gebreken (
             kenteken VARCHAR(255),
             soort_erkenning_keuringsinstantie VARCHAR(255),
@@ -164,7 +164,7 @@ def create_geconstateerde_gebreken_table(cursor):
 def create_gebreken_beschrijving_table(cursor):
     try:
         cursor.execute("""
-        DROP TABLE IF EXISTS raw.rdw__gebreken_beschrijving;
+        DROP TABLE IF EXISTS raw.rdw__gebreken_beschrijving CASCADE;
         CREATE TABLE IF NOT EXISTS raw.rdw__gebreken_beschrijving (
             gebrek_identificatie VARCHAR(255) PRIMARY KEY,
             ingangsdatum_gebrek INTEGER,
@@ -206,6 +206,8 @@ def load_data(cursor, table_name, data):
         conflict_columns = 'kenteken, meld_datum_door_keuringsinstantie, meld_tijd_door_keuringsinstantie, gebrek_identificatie'
     elif table_name == 'rdw__gebreken_beschrijving':
         conflict_columns = 'gebrek_identificatie'
+    elif table_name == 'rdw__keuringen':
+        conflict_columns = 'kenteken, meld_datum_door_keuringsinstantie'
     else:
         conflict_columns = 'kenteken'
     
@@ -253,9 +255,9 @@ def main():
         create_gebreken_beschrijving_table(cursor)
         # Define tables and their corresponding URLs
         tables = [
-            ("rdw__voertuigen", "https://opendata.rdw.nl/resource/m9d7-ebf2.json"),
-            ("rdw__keuringen", "https://opendata.rdw.nl/resource/sgfe-77wx.json"),
-            ("rdw__geconstateerde_gebreken", "https://opendata.rdw.nl/resource/a34c-vvps.json"),
+            ("rdw__voertuigen", "https://opendata.rdw.nl/resource/m9d7-ebf2.json?$where=starts_with(kenteken, '44')&$limit=10000"),
+            ("rdw__keuringen", "https://opendata.rdw.nl/resource/sgfe-77wx.json?$where=starts_with(kenteken, '44')&$limit=10000"),
+            ("rdw__geconstateerde_gebreken", "https://opendata.rdw.nl/resource/a34c-vvps.json?$where=starts_with(kenteken, '44')&$limit=10000"),
             ("rdw__gebreken_beschrijving", "https://opendata.rdw.nl/resource/hx2c-gt7k.json")
         ]
 

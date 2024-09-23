@@ -15,17 +15,26 @@ geconstateerde_gebreken as (
 keuringen_gebreken_joined as (
 
     select 
-            md5(k.voertuig_id || k.datum_keuring || gg.gebrek_id) as unique_id,
             k.voertuig_id,
             k.datum_keuring,
-            gg.gebrek_id,
+            COALESCE(gg.gebrek_id, 'geen_gebrek') as gebrek_id,
             k.soort_erkenning,
             k.soort_melding,
             k.vervaldatum_apk
     from keuringen k
     left join geconstateerde_gebreken gg
         on k.voertuig_id = gg.voertuig_id
+        and k.datum_keuring = gg.datum_keuring
+        
 
 )
 
-select * from keuringen_gebreken_joined
+select 
+        voertuig_id || datum_keuring::varchar || gebrek_id as unique_id,
+        voertuig_id,
+        datum_keuring,
+        gebrek_id,
+        soort_erkenning,
+        soort_melding,
+        vervaldatum_apk
+from keuringen_gebreken_joined

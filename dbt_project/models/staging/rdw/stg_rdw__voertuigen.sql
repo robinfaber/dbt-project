@@ -11,9 +11,23 @@ renamed as (
     select
         kenteken as voertuig_id,
 
+        -- case 
+        --     when voertuigsoort in ('Personenauto', 'Bedrijfsauto') then 'Auto'
+        --     when voertuigsoort in ('Motorfiets', 'Driewielig motorrijtuig') then 'Motor'
+        --     else 'Overige'
+        -- end as hoofdtype_voertuig,
+
+        {% set voertuigsoort_mapping = {
+            'Personenauto': 'Auto',
+            'Bedrijfsauto': 'Auto',
+            'Motorfiets': 'Motor',
+            'Driewielig motorrijtuig': 'Motor'
+        } %}
+
         case 
-            when voertuigsoort in ('Personenauto', 'Bedrijfsauto') then 'Auto'
-            when voertuigsoort in ('Motorfiets', 'Driewielig motorrijtuig') then 'Motor'
+            {% for key, value in voertuigsoort_mapping.items() %}
+                when voertuigsoort = '{{ key }}' then '{{ value }}'
+            {% endfor %}
             else 'Overige'
         end as hoofdtype_voertuig,
 

@@ -6,6 +6,10 @@ models:
     columns:
       - name: voertuig_id
         description: "Voertuig ID"
+        data_tests:
+          - unique
+          - not_null
+          - length_is_six
       - name: hoofdtype_voertuig
         description: "Hoofdtype voertuig"
       - name: subtype_voertuig
@@ -44,6 +48,9 @@ models:
     columns:
       - name: voertuig_id
         description: "Voertuig ID"
+        data_tests:
+          - not_null
+          - length_is_six
       - name: datum_keuring
         description: "Datum keuring"
       - name: soort_erkenning
@@ -58,6 +65,9 @@ models:
     columns:
       - name: voertuig_id
         description: "Voertuig ID"
+        data_tests:
+          - not_null
+          - length_is_six
       - name: datum_keuring
         description: "Datum keuring"
       - name: gebrek_id
